@@ -27,3 +27,11 @@ const Color continueButtonColor = Color.fromRGBO(235, 32, 93, 1);
 const Color restartButtonColor = Color.fromRGBO(243, 181, 45, 1);
 
 const String gameTitle = 'The BricksBreaker Game';
+
+const String brickRowRemoverText = '💣';
+const String brickColumnRemoverText = '🧨';
+const double powerUpProbability = 15;
+
+const String brickRowRemoverAudio = 'row_explosion.mp3';
+const String brickColumnRemoverAudio = 'column_explosion.mp3';
+const String ballAudio = 'ball.mp3';

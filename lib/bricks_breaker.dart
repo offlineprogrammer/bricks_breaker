@@ -28,7 +28,6 @@ class BricksBreaker extends FlameGame
       board,
       ball,
     ]);
-
     loadInitialBrickLayer();
   }
 
@@ -69,19 +68,21 @@ class BricksBreaker extends FlameGame
 
   int next(int min, int max) => min + _random.nextInt(max);
 
-  List<Brick> generateBrickLayer() {
+  List<Brick> generateBrickLayer(int row) {
     return List<Brick>.generate(
       numberOfBricksInRow,
       (index) => Brick(
         brickValue: next(minValueOfBrick, maxValueOfBrick),
         size: brickSize,
+        brickRow: row,
+        brickColumn: index,
       ),
     );
   }
 
   Future<void> loadInitialBrickLayer() async {
     for (var row = 0; row < numberOfBricksLayer; row++) {
-      final bricksLayer = generateBrickLayer();
+      final bricksLayer = generateBrickLayer(row);
       for (var i = 0; i < numberOfBricksInRow; i++) {
         final xPosition = i == 0
             ? 8
@@ -92,6 +93,28 @@ class BricksBreaker extends FlameGame
           bricksLayer[i]..position = Vector2(xPosition.toDouble(), yPosition),
         );
       }
+    }
+  }
+
+  Future<void> removeBrickLayerRow(int row) async {
+    final bricksToRemove = children
+        .whereType<Brick>()
+        .toList()
+        .where((element) => element.brickRow == row);
+
+    for (final brick in bricksToRemove) {
+      brick.removeFromParent();
+    }
+  }
+
+  Future<void> removeBrickLayerColumn(int column) async {
+    final bricksToRemove = children
+        .whereType<Brick>()
+        .toList()
+        .where((element) => element.brickColumn == column);
+
+    for (final brick in bricksToRemove) {
+      brick.removeFromParent();
     }
   }
 
@@ -122,7 +145,7 @@ class BricksBreaker extends FlameGame
       brick.position.y = nextYPosition;
     }
 
-    final bricksLayer = generateBrickLayer();
+    final bricksLayer = generateBrickLayer(numberOfBricksLayer);
     for (var i = 0; i < 7; i++) {
       await add(
         bricksLayer[i]
